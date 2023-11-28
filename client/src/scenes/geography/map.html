@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <title>Workers Map</title>
+    <style>
+      body {
+        margin: 0;
+      }
+
+      #map {
+        height: 100vh;
+        width: 100vw;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+  </body>
+  <script>
+    mapboxgl.accessToken = "pk.eyJ1IjoicnJhZ2h1bCIsImEiOiJjbHAyejRvdnUweXRsMnFycHJ5dzh6OXB1In0.3IsJPPfSPpbhRZHL1qFxIg";
+    const map = new mapboxgl.Map({
+      container: "map",
+      style: "mapbox://styles/mapbox/satellite-v9",
+      center: [83.61, 25.1], // Adjust based on your data or use the first coordinate
+      zoom: 14,
+    });
+
+    // Load worker locations from JSON file
+    fetch("elevasol-db.worker_locations.json")
+      .then((response) => response.json())
+      .then((data) => {
+        data.forEach((worker) => {
+          const coordinates = worker.coordinates.split(",").map(Number);
+          new mapboxgl.Marker()
+            .setLngLat([coordinates[1], coordinates[0]])
+            .setPopup(new mapboxgl.Popup().setText(worker.worker_id))
+            .addTo(map);
+        });
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  </script>
+</html>
