@@ -1,4 +1,4 @@
-# MERN React Admin Dashboard
+# A small setup guide for this project
 
 
 - Open the folder: client/src/scenes/geography and open cmd there
